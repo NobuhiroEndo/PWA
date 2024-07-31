@@ -1,0 +1,55 @@
+version: '3.9'
+services:
+  pwa_db:
+    image: mysql/mysql-server:8.0.32
+    container_name: db_pwa
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    ports:
+      - 23307:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: pwa
+      MYSQL_ROOT_HOST: '%'
+  pwa_redis:
+    image: 'redis:6.2'
+    container_name: pwa_redis
+    ports:
+      - '6380:6380'
+    volumes:
+      - './data/redis:/data'
+  pwa_django:
+    build: .
+    command: >
+      sh -c "./wait-for-it.sh pwa_db root pwa;
+      cd /opt/app/Pwa;
+      python manage.py runserver 0.0.0.0:8000"
+    container_name: pwa_django
+    volumes:
+      - '.:/opt/app/Pwa'
+    ports:
+      - '8010:8000'
+      - '5679:5679'
+    depends_on:
+      - pwa_db
+      - pwa_redis
+  react_pwa:
+    image: node:18.16.1
+    container_name: react_pwa
+    volumes:
+      - ./mobile:/root/mobile
+      - node_modules_pwa:/root/mobile/node_modules
+    working_dir: /root/mobile
+    environment:
+      - NODE_PHASE=local
+    ports:
+      - '8089:8089'
+    command: bash -c 'corepack enable yarn && yarn && yarn dev'
+    depends_on:
+      - pwa_django
+
+volumes:
+  node_modules_pwa:
+
+networks:
+  app-network:
+    driver: bridge
