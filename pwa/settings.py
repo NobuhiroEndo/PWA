@@ -28,12 +28,15 @@ SECRET_KEY = 'django-insecure-zi0v*v)5^2en6cr4=65goo(zmw1*@^n6oh0ye=@=e0o(plf-8-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'e9eb-240f-53-4827-1-90-62b0-31fc-8c30.ngrok-free.app',
-]
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     '127.0.0.1',
+#     '0790-240f-53-4827-1-9d71-5e83-6708-b7ce.ngrok-free.app',
+#     '3837-240f-53-4827-1-9d71-5e83-6708-b7ce.ngrok-free.app'
+#     '3837-240f-53-4827-1-9d71-5e83-6708-b7ce.ngrok-free.app:8089',
+# ]
 
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
@@ -88,14 +91,21 @@ WSGI_APPLICATION = 'pwa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'pwa',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'pwa_db',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pwa',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'pwa_db',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -163,3 +173,7 @@ LOGGING = {
         },
     },
 }
+
+VAPID_PRIVATE_KEY_NUMBER = 1788522333873775256125501353298854005177483966127899164864060575045735498509
+WEB_PUSH_CONTENT_ENCRYPTION_PRIVATE_KEY_NUMBER = 67783459926874040938426471738064928456465293850614294069515733366924978695746
+WEB_PUSH_MAIL_ADDRESS = 'nobuhiro.0320@gmail.com'

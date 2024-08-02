@@ -1,15 +1,15 @@
 version: '3.9'
 services:
-  pwa_db:
-    image: mysql/mysql-server:8.0.32
-    container_name: db_pwa
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
-    ports:
-      - 23307:3306
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_DATABASE: pwa
-      MYSQL_ROOT_HOST: '%'
+  # pwa_db:
+  #   image: mysql/mysql-server:8.0.32
+  #   container_name: db_pwa
+  #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+  #   ports:
+  #     - 23307:3306
+  #   environment:
+  #     MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  #     MYSQL_DATABASE: pwa
+  #     MYSQL_ROOT_HOST: '%'
   pwa_redis:
     image: 'redis:6.2'
     container_name: pwa_redis
@@ -30,7 +30,7 @@ services:
       - '8010:8000'
       - '5679:5679'
     depends_on:
-      - pwa_db
+      # - pwa_db
       - pwa_redis
   react_pwa:
     image: node:18.16.1
@@ -52,4 +52,4 @@ volumes:
 
 networks:
   app-network:
-    driver: bridge
+    name: PWA_test.internal
