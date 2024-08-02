@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StylelintBareWebpackPlugin = require('stylelint-bare-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin'); // 修正点
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const isLocal = process.env.NODE_PHASE === 'local';
 const isDock = process.env.SYSTEM_TYPE === 'dock';
@@ -121,6 +122,13 @@ module.exports = {
     disableHostCheck: true,
     overlay: true,
     quiet: true,
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8010', // ローカルサーバーのURL
+    //     changeOrigin: true,
+    //     pathRewrite: {'^/api': ''},
+    //   },
+    // },
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -142,6 +150,7 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
     }),
+    new Dotenv(),
     // new ESLintWebpackPlugin({
     //   extensions: ['js', 'jsx'],
     // }),
@@ -155,8 +164,8 @@ module.exports = {
         { from: standardFontsDir, to: 'standard_fonts/' },
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
-        // { from: 'src/serviceWorker.js', to: 'serviceWorker.js' },
-        { from: 'src/firebase-messaging-sw.js', to: 'firebase-messaging-sw.js' },
+        { from: 'src/serviceworker.js', to: 'serviceworker.js' },
+        // { from: 'src/firebase-messaging-sw.js', to: 'firebase-messaging-sw.js' },
     ]),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,

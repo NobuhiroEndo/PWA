@@ -65,3 +65,4 @@ jsondiff==2.0.0
 charset-normalizer==2.0.12
 tnefparse==1.4.0
 PyMuPDF==1.24.4
+http-ece==1.2.0
