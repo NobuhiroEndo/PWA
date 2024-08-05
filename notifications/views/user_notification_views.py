@@ -1,21 +1,33 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from ..models import UserNotification
 from ..serializers import UserNotificationSerializer
 from logging import getLogger
+from django.middleware.csrf import get_token
 
 logger = getLogger('notifications')
 
 class UserNotificationViewSet(viewsets.ViewSet):
+    authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
     @action(detail=False, methods=['post'])
     def save_subscription_info(self, request):
-        username = 'nobuhiro'  # テストユーザー名
+        logger.debug('開始！！！！！！！！')
+        auth_header = request.headers.get('Authorization')
+        logger.debug(f'受け取ったAuthorizationヘッダー: {auth_header}')
+
+        user = request.user  # テストユーザー名
+        logger.debug(f'ゆーざー：{request.user}')
         
+        if not user.is_authenticated:
+            return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
         try:
-            user = User.objects.get(username=username)
-            
             endpoint = request.data.get('endpoint')
             expiration_time = request.data.get('expiration_time')
             keys = request.data.get('keys')

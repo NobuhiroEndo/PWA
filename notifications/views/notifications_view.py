@@ -51,4 +51,5 @@ class NotificationViewSet(viewsets.ViewSet):
         except UserNotification.DoesNotExist:
             return Response({'error': 'UserNotification not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            logger.debug('一番最後のエラー')
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
