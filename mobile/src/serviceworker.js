@@ -14,15 +14,17 @@ self.addEventListener('push', (event) => {
       const body = payload?.body ?? '';
       const icon = payload?.icon ?? 'プッシュ通知で表示させたいアイコン画像URLのデフォルト値';
       const data = payload?.data ?? null;
+      const badgeCount = payload?.badge_count ?? 0;
     
       self.registration.showNotification(title, {
+        title,
         body,
         icon,
         data,
       });
 
       if ('setAppBadge' in navigator) {
-        navigator.setAppBadge(1);
+        navigator.setAppBadge(badgeCount);
       }
 
     } catch (e) {
@@ -30,10 +32,21 @@ self.addEventListener('push', (event) => {
     }
   });
   
-  self.addEventListener('notificationclick', (event) => {
+  self.addEventListener('notificationclick', async (event) => {
     try {
       event.notification.close();
-      clients.openWindow(event.notification.data?.url ?? '/');
+
+      await fetch(`https://api.februar.org/api/notification_read/notification_read/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'nobuhiro'
+        })
+      });
+
+      // clients.openWindow(event.notification.data?.url ?? '/');
       if ('clearAppBadge' in navigator) {
         navigator.clearAppBadge();
       }
