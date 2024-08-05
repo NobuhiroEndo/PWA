@@ -49,16 +49,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'notifications',
 ]
 
 MIDDLEWARE = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,6 +67,13 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_SECURE = True  # HTTPSを使用している場合はTrue
+SESSION_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 ROOT_URLCONF = 'pwa.urls'
 
@@ -173,6 +181,21 @@ LOGGING = {
         },
     },
 }
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://api.februar.org',
+# ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+# CSRF_COOKIE_NAME = 'csrftoken'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 VAPID_PRIVATE_KEY_NUMBER = 1788522333873775256125501353298854005177483966127899164864060575045735498509
 WEB_PUSH_CONTENT_ENCRYPTION_PRIVATE_KEY_NUMBER = 67783459926874040938426471738064928456465293850614294069515733366924978695746
