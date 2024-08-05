@@ -1,3 +1,4 @@
 from .user_notification_views import UserNotificationViewSet
 from .notifications_view import NotificationViewSet
 from .get_vapid_public_key_view import VAPIDPublicKeyViewSet
+from .health import HealthCheckView
