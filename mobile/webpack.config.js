@@ -9,6 +9,7 @@ const StylelintBareWebpackPlugin = require('stylelint-bare-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin'); // 修正点
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const dotenv = require('dotenv');
 
 const isLocal = process.env.NODE_PHASE === 'local';
 const isDock = process.env.SYSTEM_TYPE === 'dock';
@@ -136,6 +137,7 @@ module.exports = {
         process.env.NODE_PHASE ? process.env.NODE_PHASE : 'local',
       ),
       'process.env.SYSTEM_TYPE': JSON.stringify(isDock ? 'dock' : 'web'),
+      // 'process.env.REACT_APP_API_BASE_URL': JSON.stringify(process.env.REACT_APP_API_BASE_URL),
     }),
     new CleanWebpackPlugin(), // 修正点
     new HtmlWebpackPlugin({
@@ -150,7 +152,11 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
     }),
-    new Dotenv(),
+    new Dotenv({
+      path: './.env',
+      safe: false,
+      systemvars: true,
+    }),
     // new ESLintWebpackPlugin({
     //   extensions: ['js', 'jsx'],
     // }),
