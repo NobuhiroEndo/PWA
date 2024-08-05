@@ -8,13 +8,13 @@ self.addEventListener('push', (event) => {
         console.log('通知許可なし');
         return;
       }
-  
-    //   const payload = event.data?.json() ?? null;
-      const title = 'テストタイトル';
-      const body = 'テストボディ2';
-      const icon = '/icons/icon-192×192.png';
-      const data = 'テストデータ';
-  
+
+      const payload = event.data?.json() ?? null;
+      const title = payload?.title ?? 'プッシュ通知で表示されるタイトルのデフォルト値';
+      const body = payload?.body ?? '';
+      const icon = payload?.icon ?? 'プッシュ通知で表示させたいアイコン画像URLのデフォルト値';
+      const data = payload?.data ?? null;
+    
       self.registration.showNotification(title, {
         body,
         icon,

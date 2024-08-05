@@ -22,12 +22,16 @@ class NotificationViewSet(viewsets.ViewSet):
             if not (endpoint and encoded_user_public_key and encoded_user_auth):
                 return Response({'error': 'Incomplete subscription info.'}, status=status.HTTP_400_BAD_REQUEST)
 
+            user_notification.unread_notifications_count += 1
+            user_notification.save()
+
             webpush_helper = WebPushHelper()
             
             # 通知を送信
             payload = {
-                'title': 'Default Title',
-                'body': 'Default Body',
+                'title': request.data.get('title', 'タイトル'),
+                'body': request.data.get('body', 'ボディ'),
+                'badge_count': user_notification.unread_notifications_count
             }
             response = webpush_helper.send_push(
                 endpoint=endpoint,
@@ -43,8 +47,8 @@ class NotificationViewSet(viewsets.ViewSet):
             return Response({'message': 'Notification sent successfully', 'response': response.json()}, status=status.HTTP_200_OK)
         
         except User.DoesNotExist:
-            return Response({'errorゆーざー': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         except UserNotification.DoesNotExist:
-            return Response({'errorつうち': 'UserNotification not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'UserNotification not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'errorよくわからん': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
