@@ -43,7 +43,7 @@ const Notification = () => {
 
   // トークンをバックエンドに保存
   const saveTokenToDatabase = async (token) => {
-    console.log('受け取ったtoken：', JSON.stringify({ subscription_info: token }));
+    console.log('受け取ったtoken：', JSON.stringify({ endpoint: token }));
     try {
       const response = await fetch(`${baseURL}/user_notifications/save_subscription_info/`, {
         method: 'POST',
