@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCX7V6JgK6dJtC5pkyiWyyvbi_nXuxmSbY",
-  authDomain: "pwa-test-endo.firebaseapp.com",
-  projectId: "pwa-test-endo",
-  storageBucket: "pwa-test-endo.appspot.com",
-  messagingSenderId: "1072641905457",
-  appId: "1:1072641905457:web:f7eb5d00d6e6799923d610",
-  measurementId: "G-65YQB6Q86Q"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 initializeApp(firebaseConfig);
@@ -16,16 +16,14 @@ const messaging = getMessaging();
 
 export const requestForToken = async () => {
   try {
-    const currentToken = await getToken(messaging, { vapidKey: "BD4ViSjnDbaROdqtIuw87O3-t641sI3CFhlM5aBiYGqb-3NwKL-sjhpD4OIHhxVuhSG755iqe-jrws8jkDNS6eY" });
+    const currentToken = await getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY });
     if (currentToken) {
-      console.log("current token for client: ", currentToken);
       return currentToken;
     } else {
-      console.log("No registration token available. Request permission to generate one.");
       return null;
     }
   } catch (err) {
-    console.log("An error occurred while retrieving token. ", err);
+    console.log("トークン処理中にエラーが発生：", err);
     return null;
   }
 };

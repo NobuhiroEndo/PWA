@@ -40,12 +40,19 @@ const Notification = () => {
   const saveTokenToDatabase = async (token) => {
     console.log('受け取ったtoken：', JSON.stringify({ subscription_info: token }));
     try {
-      const response = await fetch('https://e9eb-240f-53-4827-1-90-62b0-31fc-8c30.ngrok-free.app/api/user_notifications/save_subscription_info/', {
+      const response = await fetch(`${baseURL}/user_notifications/save_subscription_info/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subscription_info: token }), // バックエンドが期待するデータ形式に合わせる
+        body: JSON.stringify({
+          endpoint: token,
+          expiration_time: null,
+          keys: {
+              p256dh: null,
+              auth: null,
+          },
+      }),
       });
       if (response.ok) {
         console.log('Token saved to database');

@@ -8,13 +8,13 @@
  // your app's Firebase config object.
  // https://firebase.google.com/docs/web/setup#config-object
  firebase.initializeApp({
-    apiKey: "AIzaSyCX7V6JgK6dJtC5pkyiWyyvbi_nXuxmSbY",
-    authDomain: "pwa-test-endo.firebaseapp.com",
-    projectId: "pwa-test-endo",
-    storageBucket: "pwa-test-endo.appspot.com",
-    messagingSenderId: "1072641905457",
-    appId: "1:1072641905457:web:f7eb5d00d6e6799923d610",
-    measurementId: "G-65YQB6Q86Q"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
  });
 
  // Retrieve an instance of Firebase Messaging so that it can handle background
