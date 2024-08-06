@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import NotFCMNotification from './components/NotFCMNotification';
+import Notification from './components/Notification';
 import UpdateUnreadCount from './components/UpdateUnreadCount';
 import LoginForm from './components/LoginForm';
 import LogoutButton from './components/LogoutButton';
@@ -11,7 +11,7 @@ const App = () => {
     }, [isLoggedIn]);
     return (
         <>
-            {isLoggedIn && <NotFCMNotification />}
+            {isLoggedIn && <Notification />}
             <LoginForm />
             {isLoggedIn && <LogoutButton />}
             <UpdateUnreadCount />

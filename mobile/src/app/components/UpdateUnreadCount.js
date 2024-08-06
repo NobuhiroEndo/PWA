@@ -25,7 +25,7 @@ const UpdateUnreadCount = () => {
             }
 
             const data = await response.json();
-            alert(`Unread count updated successfully. Current count: ${data.unread_count}`);
+            alert(`Unread count updated successfully.`);
         } catch (error) {
             console.error('Error updating unread count:', error);
             alert('Failed to update unread count.');

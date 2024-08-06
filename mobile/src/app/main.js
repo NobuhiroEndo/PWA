@@ -6,7 +6,7 @@ import App from './app';
 const container = document.getElementById('app-root');
 
 if (window.navigator.serviceWorker !== undefined) {
-    window.navigator.serviceWorker.register('/serviceworker.js');
+    window.navigator.serviceWorker.register('/firebase-messaging-sw.js');
 }
 
 if (container) {

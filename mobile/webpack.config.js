@@ -170,8 +170,8 @@ module.exports = {
         { from: standardFontsDir, to: 'standard_fonts/' },
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
-        { from: 'src/serviceworker.js', to: 'serviceworker.js' },
-        // { from: 'src/firebase-messaging-sw.js', to: 'firebase-messaging-sw.js' },
+        // { from: 'src/serviceworker.js', to: 'serviceworker.js' },
+        { from: 'src/firebase-messaging-sw.js', to: 'firebase-messaging-sw.js' },
     ]),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,

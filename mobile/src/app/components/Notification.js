@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { requestForToken, onMessageListener } from "./firebase";
+import useAuth from '../hooks/useAuth'; 
+
 
 const Notification = () => {
   const [notification, setNotification] = useState({ title: "", body: "" });
+  const baseURL = process.env.REACT_APP_API_BASE_URL;
+  const { authToken } = useAuth();
 
   // アプリがロードされたときにサービスワーカーを登録
   useEffect(() => {
@@ -44,6 +48,7 @@ const Notification = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Token ${authToken}`
         },
         body: JSON.stringify({
           endpoint: token,
