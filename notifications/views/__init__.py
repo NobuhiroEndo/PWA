@@ -6,3 +6,4 @@ from .notification_read import NotificationReadViewSet
 from .notification_count import NotificationCountViewSet
 from .user_login import UserLoginViewSet
 from .user_logout import UserLogoutViewSet
+from .update_unread_count import UpdateUnreadCountViewSet
