@@ -7,13 +7,36 @@ from django.contrib.auth.models import User
 from ..models import UserNotification
 from ..serializers import UserNotificationSerializer
 from logging import getLogger
-from django.middleware.csrf import get_token
+import boto3
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError
+import json
+from django.conf import settings
 
 logger = getLogger('notifications')
 
 class UserNotificationViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
+    logger.error(f'りーじょん：{settings.AWS_DEFAULT_REGION}')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Load AWS credentials and region from environment variables
+        self.aws_access_key_id = settings.AWS_ACCESS_KEY_ID
+        self.aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY
+        self.aws_default_region = settings.AWS_DEFAULT_REGION
+
+        if not all([self.aws_access_key_id, self.aws_secret_access_key, self.aws_default_region]):
+            logger.error('AWS credentials or region not set in environment variables')
+            raise ValueError('AWS credentials or region not set')
+
+        # Initialize SNS client
+        self.sns_client = boto3.client(
+            'sns',
+            region_name=self.aws_default_region,
+            aws_access_key_id=self.aws_access_key_id,
+            aws_secret_access_key=self.aws_secret_access_key
+        )
 
     @action(detail=False, methods=['post'])
     def save_subscription_info(self, request):
@@ -42,6 +65,24 @@ class UserNotificationViewSet(viewsets.ViewSet):
             user_notification.encoded_user_public_key = keys['p256dh']
             user_notification.encoded_user_auth = keys['auth']
             user_notification.save()
+
+            try:
+                response = self.sns_client.subscribe(
+                    TopicArn='arn:aws:sns:ap-northeast-1:917508996493:PWA_test.fifo',
+                    Protocol='application',
+                    Endpoint=endpoint,
+                    Attributes={
+                        'CustomUserData': json.dumps({
+                            'user_id': user.id,
+                            'public_key': keys['p256dh'],
+                            'auth_key': keys['auth'],
+                        })
+                    }
+                )
+                logger.debug(f'SNSサブスクリプションのレスポンス: {response}')
+            except Exception as e:
+                logger.error(f'SNSサブスクリプションの作成中にエラーが発生しました: {str(e)}')
+                return Response({'error': 'Failed to create SNS subscription'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             return Response({'status': 'subscription info saved'}, status=status.HTTP_200_OK)
         
