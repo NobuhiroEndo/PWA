@@ -28,14 +28,6 @@ SECRET_KEY = 'django-insecure-zi0v*v)5^2en6cr4=65goo(zmw1*@^n6oh0ye=@=e0o(plf-8-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = [
-#     'localhost',
-#     '127.0.0.1',
-#     '0790-240f-53-4827-1-9d71-5e83-6708-b7ce.ngrok-free.app',
-#     '3837-240f-53-4827-1-9d71-5e83-6708-b7ce.ngrok-free.app'
-#     '3837-240f-53-4827-1-9d71-5e83-6708-b7ce.ngrok-free.app:8089',
-# ]
-
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -59,7 +51,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -67,10 +58,8 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-# CSRF_COOKIE_SECURE = True
-# CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_NAME = 'sessionid'
-SESSION_COOKIE_SECURE = True  # HTTPSを使用している場合はTrue
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -94,21 +83,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pwa.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'pwa',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'pwa_db',
-#         'PORT': '3306',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -196,7 +170,3 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-VAPID_PRIVATE_KEY_NUMBER = 1788522333873775256125501353298854005177483966127899164864060575045735498509
-WEB_PUSH_CONTENT_ENCRYPTION_PRIVATE_KEY_NUMBER = 67783459926874040938426471738064928456465293850614294069515733366924978695746
-WEB_PUSH_MAIL_ADDRESS = 'nobuhiro.0320@gmail.com'
