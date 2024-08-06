@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth';
 
 
 const Notification = () => {
+  console.log('れんだりんぐされたよ！');
   const [notification, setNotification] = useState({ title: "", body: "" });
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const { authToken } = useAuth();

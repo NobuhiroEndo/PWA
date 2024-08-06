@@ -1,30 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAuthToken, removeAuthToken } from '../../redux/authSlice';
 
 const useAuth = () => {
-    const [authToken, setAuthToken] = useState(() => localStorage.getItem('authToken'));
-
-    useEffect(() => {
-        const handleStorageChange = () => {
-            setAuthToken(localStorage.getItem('authToken'));
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, []);
+    const dispatch = useDispatch();
+    const authToken = useSelector((state) => state.auth.authToken);
 
     const updateLoginStatus = (token) => {
         if (token) {
-            localStorage.setItem('authToken', token);
-            setAuthToken(token);
+            dispatch(setAuthToken(token));
         } else {
-            localStorage.removeItem('authToken');
-            setAuthToken(null);
+            dispatch(removeAuthToken());
         }
     };
 
-    return { authToken, isLoggedIn: !!authToken, updateLoginStatus };
+    return {
+        authToken,
+        isLoggedIn: !!authToken,
+        updateLoginStatus
+    };
 };
 
 export default useAuth;
