@@ -3,7 +3,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from ..models import UserNotification
 from ..serializers import UserNotificationSerializer
-from ..utils.webpush import WebPushHelper
+from ..utils.utils import send_push_notification
+from logging import getLogger
+
+logger = getLogger('notifications')
 
 class UpdateUnreadCountViewSet(viewsets.ViewSet):
     # その他のアクション
@@ -12,6 +15,11 @@ class UpdateUnreadCountViewSet(viewsets.ViewSet):
     def update_unread_count(self, request, pk=None):
         try:
             user_notification = UserNotification.objects.get(user_id=pk)
+            token = user_notification.endpoint
+            
+            if not token:
+                return Response({'error': 'Incomplete subscription info.'}, status=status.HTTP_400_BAD_REQUEST)
+
             increment = request.data.get('increment', 0)
             decrement = request.data.get('decrement', 0)
 
@@ -21,20 +29,13 @@ class UpdateUnreadCountViewSet(viewsets.ViewSet):
                 user_notification.unread_notifications_count -= int(decrement)
 
             user_notification.save()
-
             # Webプッシュ通知を送信
-            WebPushHelper.send_push(
-                endpoint=user_notification.endpoint,
-                encoded_user_public_key=user_notification.encoded_user_public_key,
-                encoded_user_auth=user_notification.encoded_user_auth,
-                payload={
-                    'title': 'Notification Count Updated',
-                    'body': f'You now have {user_notification.unread_notifications_count} unread notifications.',
-                    'badge_count': user_notification.unread_notifications_count
-                }
-            )
-
-            return Response({'status': 'count updated', 'unread_count': user_notification.unread_notifications_count})
+            title = 'test'
+            body = 'HELLO!'
+            badge_count = user_notification.unread_notifications_count
+            response = send_push_notification(token, title, body, badge_count)
+            logger.error(f'れすぽんす：{send_push_notification(token, title, body, badge_count)}')
+            return Response({'message': 'Notification sent successfully', 'response': response}, status=status.HTTP_200_OK)
 
         except UserNotification.DoesNotExist:
             return Response({'error': 'UserNotification not found'}, status=status.HTTP_404_NOT_FOUND)

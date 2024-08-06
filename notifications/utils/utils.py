@@ -6,14 +6,17 @@ from django.conf import settings
 cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS)
 firebase_admin.initialize_app(cred)
 
-def send_push_notification(token, title, body):
+def send_push_notification(token, title, body, badge_count):
     # 通知のペイロードを準備
     message = messaging.Message(
         token=token,
         notification=messaging.Notification(
             title=title,
             body=body
-        )
+        ),
+        data={
+            'badge_count': str(badge_count)  # badge_count を文字列に変換してデータフィールドに追加
+        }
     )
 
     # 通知を送信
