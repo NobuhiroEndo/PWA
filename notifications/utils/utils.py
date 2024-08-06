@@ -1,6 +1,9 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
 from django.conf import settings
+from logging import getLogger
+
+logger = getLogger('notifications')
 
 # Firebase Admin SDKを初期化
 cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS)

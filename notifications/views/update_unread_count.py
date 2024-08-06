@@ -29,15 +29,16 @@ class UpdateUnreadCountViewSet(viewsets.ViewSet):
                 user_notification.unread_notifications_count -= int(decrement)
 
             user_notification.save()
+
             # Webプッシュ通知を送信
             title = 'test'
             body = 'HELLO!'
             badge_count = user_notification.unread_notifications_count
             response = send_push_notification(token, title, body, badge_count)
-            logger.error(f'れすぽんす：{send_push_notification(token, title, body, badge_count)}')
             return Response({'message': 'Notification sent successfully', 'response': response}, status=status.HTTP_200_OK)
 
         except UserNotification.DoesNotExist:
             return Response({'error': 'UserNotification not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            logger.debug('一番最後のエラー')
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

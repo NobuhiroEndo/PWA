@@ -16,9 +16,7 @@ class NotificationViewSet(viewsets.ViewSet):
             user_notification = UserNotification.objects.get(user=user)
 
             token = user_notification.endpoint
-            encoded_user_public_key = user_notification.encoded_user_public_key
-            encoded_user_auth = user_notification.encoded_user_auth
-            
+
             if not token:
                 return Response({'error': 'Incomplete subscription info.'}, status=status.HTTP_400_BAD_REQUEST)
 
