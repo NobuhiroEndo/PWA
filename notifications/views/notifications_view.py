@@ -12,7 +12,7 @@ class NotificationViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def send_notification(self, request):
         try:
-            user = User.objects.get(username='nobuhiro')
+            user = User.objects.get(username='admin')
             user_notification = UserNotification.objects.get(user=user)
 
             endpoint = user_notification.endpoint
