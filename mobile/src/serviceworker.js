@@ -32,72 +32,72 @@ self.addEventListener('push', (event) => {
     }
   });
   
-  self.addEventListener('notificationclick', async (event) => {
-    try {
-      event.notification.close();
-      console.log('リスナーは起動しました！')
+  // self.addEventListener('notificationclick', async (event) => {
+  //   try {
+  //     event.notification.close();
+  //     console.log('リスナーは起動しました！')
 
-      await fetch(`https://api.februar.org/api/notification_read/notification_read/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'nobuhiro'
-        })
-      });
+  //     await fetch(`https://api.februar.org/api/notification_read/notification_read/`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         username: 'nobuhiro'
+  //       })
+  //     });
 
-      const response = await fetch(`https://api.februar.org/api/notification_count/notification_count/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  //     const response = await fetch(`https://api.februar.org/api/notification_count/notification_count/`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      const data = await response.json();
-      const badgeCount = data.unread_notifications_count ?? 0;
-      console.log('かうんと！',badgeCount)
+  //     const data = await response.json();
+  //     const badgeCount = data.unread_notifications_count ?? 0;
+  //     console.log('かうんと！',badgeCount)
 
-      if ('setAppBadge' in navigator) {
-        navigator.setAppBadge(badgeCount);
-      }
+  //     if ('setAppBadge' in navigator) {
+  //       navigator.setAppBadge(badgeCount);
+  //     }
 
-    } catch (e) {
-      console.error('エラー：',e);
-    }
-  });
+  //   } catch (e) {
+  //     console.error('エラー：',e);
+  //   }
+  // });
 
-  self.addEventListener('notificationclose', async (event) => {
-    try {
-      event.notification.close();
-      console.log('リスナーは起動しました！')
+  // self.addEventListener('notificationclose', async (event) => {
+  //   try {
+  //     event.notification.close();
+  //     console.log('リスナーは起動しました！')
 
-      await fetch(`https://api.februar.org/api/notification_read/notification_read/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'nobuhiro'
-        })
-      });
+  //     await fetch(`https://api.februar.org/api/notification_read/notification_read/`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         username: 'nobuhiro'
+  //       })
+  //     });
 
-      const response = await fetch(`https://api.februar.org/api/notification_count/notification_count/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  //     const response = await fetch(`https://api.februar.org/api/notification_count/notification_count/`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      const data = await response.json();
-      const badgeCount = data.unread_notifications_count ?? 0;
-      console.log('かうんと！',badgeCount)
+  //     const data = await response.json();
+  //     const badgeCount = data.unread_notifications_count ?? 0;
+  //     console.log('かうんと！',badgeCount)
 
-      if ('setAppBadge' in navigator) {
-        navigator.setAppBadge(badgeCount);
-      }
+  //     if ('setAppBadge' in navigator) {
+  //       navigator.setAppBadge(badgeCount);
+  //     }
 
-    } catch (e) {
-      console.error('エラー：',e);
-    }
-  });
+  //   } catch (e) {
+  //     console.error('エラー：',e);
+  //   }
+  // });
