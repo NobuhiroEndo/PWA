@@ -8,6 +8,8 @@ from ..models import UserNotification
 from ..serializers import UserNotificationSerializer
 from logging import getLogger
 from django.middleware.csrf import get_token
+import boto3
+from decouple import config
 
 logger = getLogger('notifications')
 
@@ -17,6 +19,16 @@ class UserNotificationViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def save_subscription_info(self, request):
+        aws_access_key_id = config('AWS_ACCESS_KEY_ID')
+        aws_secret_access_key = config('AWS_SECRET_ACCESS_KEY')
+        aws_region = config('AWS_REGION')
+
+        sns_client = boto3.client(
+            'sns',
+            region_name=aws_region,
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key
+        )
         logger.debug('開始！！！！！！！！')
         auth_header = request.headers.get('Authorization')
         logger.debug(f'受け取ったAuthorizationヘッダー: {auth_header}')
@@ -36,8 +48,15 @@ class UserNotificationViewSet(viewsets.ViewSet):
                 return Response({'error': 'Invalid subscription info'}, status=status.HTTP_400_BAD_REQUEST)
             
             user_notification, created = UserNotification.objects.get_or_create(user=user)
-            
-            user_notification.endpoint = endpoint
+
+            response = sns_client.create_platform_endpoint(
+                PlatformApplicationArn='arn:aws:sns:ap-northeast-1:917508996493:app/GCM/PWA_test',
+                Token=endpoint
+            )
+
+            endpoint_arn = response['EndpointArn']
+
+            user_notification.endpoint = endpoint_arn
             user_notification.expiration_time = expiration_time
             user_notification.encoded_user_public_key = keys['p256dh']
             user_notification.encoded_user_auth = keys['auth']
