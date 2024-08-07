@@ -2,22 +2,10 @@
 import { checkIsWebPushSupported } from "./checkIsWebPushSupported";
 import { getVapidPublicKey } from "./getVapidPublicKey";
 
-// const getCSRFToken = () => {
-//     const cookieValue = document.cookie
-//         .split('; ')
-//         .find(row => row.startsWith('csrftoken='));
-//     if (cookieValue) {
-//         return cookieValue.split('=')[1];
-//     } else {
-//         console.error("CSRFトークンが見つかりません");
-//         return null;
-//     }
-// };
-
 const subscribe = async (authToken) => {
     const baseURL = process.env.REACT_APP_API_BASE_URL;
     console.log('チェック開始');
-    
+    console.log('機種情報：',navigator.userAgent)
     try {
         if (!(await checkIsWebPushSupported())) {
             console.log('ご利用のブラウザではWeb Pushは使えません');
@@ -25,7 +13,6 @@ const subscribe = async (authToken) => {
         }
 
         const validPublicKey = await getVapidPublicKey();
-        console.log('鍵の取得は成功');
 
         if (window.Notification.permission === "default") {
             const result = await window.Notification.requestPermission();
@@ -55,7 +42,6 @@ const subscribe = async (authToken) => {
         }
 
         try {
-			console.log('送るよおーすとーくん：',authToken)
             const res = await fetch(`${baseURL}/user_notifications/save_subscription_info/`, {
                 method: "POST",
                 headers: {
@@ -73,9 +59,9 @@ const subscribe = async (authToken) => {
                 }),
             });
             if (!res.ok) {
-                console.log("プッシュ通知の購読に失敗しまωしたその１");
+                console.log("プッシュ通知の購読に失敗しましたその１");
             } else {
-                console.log('プッシュ通知を購読しました', window.Notification.permission);
+                console.log('プッシュ通知を購読しました', subscriptionJSON.endpoint);
             }
         } catch (err) {
             console.error("プッシュ通知の購読に失敗しましたその２", err);

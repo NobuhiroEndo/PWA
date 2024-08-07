@@ -1,6 +1,5 @@
 const getVapidPublicKey = async () => {
   const baseURL = process.env.REACT_APP_API_BASE_URL;
-  console.log(`Fetching VAPID public key from: ${baseURL}/get_vapid_public_key/`);
   
   try {
     const res = await fetch(`${baseURL}/get_vapid_public_key/`);
@@ -9,7 +8,6 @@ const getVapidPublicKey = async () => {
       throw new Error(`VAPID公開鍵取得失敗: ${res.status} ${res.statusText}`);
     }
     const json = await res.json();
-    console.log('JSON鍵:', json);
     return json.public_key;
   } catch (error) {
     console.error('Fetchエラー:', error);

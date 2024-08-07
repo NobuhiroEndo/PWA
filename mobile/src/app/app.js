@@ -7,7 +7,6 @@ import useAuth from './hooks/useAuth';
 
 const App = () => {
     const { isLoggedIn } = useAuth();
-    console.log('APP内：', isLoggedIn);
 
     return (
         <>

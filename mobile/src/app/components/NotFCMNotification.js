@@ -6,8 +6,6 @@ import useAuth from '../hooks/useAuth';
 const NotFCMNotification = () => {
     const { authToken } = useAuth();
 
-    console.log('おーすとーくん：',authToken)
-
     const handleRequestToken = async () => {
       try {
         if (authToken) {
